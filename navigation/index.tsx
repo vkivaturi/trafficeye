@@ -16,8 +16,10 @@ import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
+import HomeScreen from '../screens/HomeScreen';
 import TrafficViolationScreen from '../screens/TrafficViolationScreen';
 import SignalLightScreen from '../screens/SignalLightScreen';
+import InfoScreen from '../screens/InfoScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 
@@ -66,34 +68,37 @@ function BottomTabNavigator() {
       }}>
       <BottomTab.Screen
         name="TabOne"
-        component={TrafficViolationScreen}
-        options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
-          title: 'Traffic violation',
-          tabBarIcon: ({ color }) => <Entypo name="squared-cross" size={30} color={color} />,
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate('Modal')}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}>
-              <FontAwesome
-                name="info-circle"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
-          ),
-        })}
+        component={HomeScreen}
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ color }) => <Entypo name="home" size={30} color={color} />,
+        }}
       />
       <BottomTab.Screen
         name="TabTwo"
+        component={TrafficViolationScreen}
+        options={{
+          title: 'Traffic violation',
+          tabBarIcon: ({ color }) => <Entypo name="squared-cross" size={30} color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="TabThree"
         component={SignalLightScreen}
         options={{
-          title: 'Traffic light',
+          title: 'Signal issue',
           tabBarIcon: ({ color }) => <FontAwesome5 name="traffic-light" size={30} color={color} />,
         }}
       />
+      <BottomTab.Screen
+        name="TabFour"
+        component={InfoScreen}
+        options={{
+          title: 'Info',
+          tabBarIcon: ({ color }) => <FontAwesome5 name="info" size={30} color={color} />,
+        }}
+      />
+
     </BottomTab.Navigator>
   );
 }
