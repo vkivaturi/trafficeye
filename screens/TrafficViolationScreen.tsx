@@ -1,14 +1,16 @@
 import { Camera, CameraType } from 'expo-camera';
-import * as Sharing from 'expo-sharing';
 import { useState } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
-import * as Linking from 'expo-linking';
+import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {CameraPreview} from '../components/CameraPreview';
 
+//Traffic violation screen is used to open camera, take picture, preview the image
 export default function TrafficViolationScreen() {
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [camera, setCamera] = useState<Camera | null>(null);
   const [image, setImage] = useState<string | null>(null);
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [capturedImage, setCapturedImage] = useState<any>(null);
 
   if (!permission) {
     // Camera permissions are still loading
@@ -25,37 +27,65 @@ export default function TrafficViolationScreen() {
     );
   }
 
-  function toggleCameraType() {
-    setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
-  }
-
+  //Take picture and set preview flag to true
   const takePicture = async () => {
-    if(camera){
-        const data = await camera.takePictureAsync();
-        setImage(data.uri);
-        //Sharing.shareAsync(data.uri);
-        Linking.openURL('https://wa.me/919916138422/?text=urlencodedtex');
+    if (camera) {
+      const photo = await camera.takePictureAsync();
+      console.log(photo);
+      setPreviewVisible(true);
+      setCapturedImage(photo);
 
     }
   }
-  
+
+  //Retake picture from the image preview screen
+  const retakePicture = () => {
+    setCapturedImage(null);
+    setPreviewVisible(false);
+    takePicture();
+  }
+
   return (
     <View style={styles.container}>
-      <Camera 
-        style={styles.camera} 
-        type={type}
-        ref={(ref) => setCamera(ref)} >
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
-            <Text style={styles.text}>Flip Camera</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={takePicture}>
-            <Text style={styles.text}>Take picture</Text>
-          </TouchableOpacity>
-          {image && <Image source={{uri: image}} style={{flex:1}}/>}
 
-        </View>
-      </Camera>
+      {previewVisible && capturedImage ? (
+        <CameraPreview photo={capturedImage} retakePicture={retakePicture}/>
+      ) :
+        (<Camera
+          style={styles.camera}
+          type={type}
+          ref={(ref) => setCamera(ref)} >
+          <View
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              flexDirection: 'row',
+              flex: 1,
+              width: '100%',
+              padding: 20,
+              justifyContent: 'space-between'
+            }}
+          >
+            <View
+              style={{
+                alignSelf: 'center',
+                flex: 1,
+                alignItems: 'center'
+              }}
+            >
+              <TouchableOpacity
+                onPress={takePicture}
+                style={{
+                  width: 70,
+                  height: 70,
+                  bottom: 0,
+                  borderRadius: 50,
+                  backgroundColor: '#fff'
+                }}
+              />
+            </View>
+          </View>
+        </Camera>)}
     </View>
   );
 }
