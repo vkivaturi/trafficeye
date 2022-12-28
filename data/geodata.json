@@ -1,0 +1,115 @@
+{
+    "locations": [
+        {
+            "id": 1,
+            "name": "Cyberabad Traffic Police",
+            "city": "Hyderabad",
+            "logo": "https://ctp.gov.in/images/TopHeader.jpg",
+            "message": "Your safety our concern",
+            "contact": {
+                "Call": "91 85004 11111",
+                "WhatsApp": "91 94906 17346"
+            },
+            "coordinatesLandmarks": [
+                {
+                    "latitude": "17.425966821498278",
+                    "longitude": "78.34051997604348",
+                    "landmarkName": "Wipro circle"
+                },
+                {
+                    "latitude": "17.427533003510074",
+                    "longitude": "78.33180817127493",
+                    "landmarkName": "Q City"
+                },
+                {
+                    "latitude": "17.44499788691818",
+                    "longitude": "78.35275822656342",
+                    "landmarkName": "IIIT Junction"
+                },
+                {
+                    "latitude": "17.44240856289944",
+                    "longitude": "78.369381129976",
+                    "landmarkName": "Deloitte Towers"
+                },
+                {
+                    "latitude": "17.421936472417343",
+                    "longitude": "78.33809573484527",
+                    "landmarkName": "ICICI Junction, Nanakaramguda"
+                },
+                {
+                    "latitude": "17.4461573019177",
+                    "longitude": "78.30700925906604",
+                    "landmarkName": "Gopanpally flyover, Nallagandla"
+                },
+                {
+                    "latitude": "17.450632768909312",
+                    "longitude": "78.31128560999495",
+                    "landmarkName": "HCU backgate, Gopanpally, Nallagandla"
+                },
+                {
+                    "latitude": "17.420998302011608",
+                    "longitude": "78.33688296102363",
+                    "landmarkName": "Cyient Junction, ISB Road"
+                },
+                {
+                    "latitude": "17.429166968743935",
+                    "longitude": "78.3257249816986",
+                    "landmarkName": "Bharat Hyundai"
+                },
+                {
+                    "latitude": "17.480151242924414",
+                    "longitude": "78.31109937133466",
+                    "landmarkName": "Nallagandla flyover, Nallagandla"
+                },
+                {
+                    "latitude": "17.463221738250933",
+                    "longitude": "78.31125584157604",
+                    "landmarkName": "Aparna Sarovar"
+                }
+            ],
+            "coordinatesJurisdictionPolygon": [
+                {
+                    "latitude": "",
+                    "longitude": ""
+                },
+                {
+                    "latitude": "",
+                    "longitude": ""
+                },
+                {
+                    "latitude": "",
+                    "longitude": ""
+                },
+                {
+                    "latitude": "",
+                    "longitude": ""
+                },
+                {
+                    "latitude": "",
+                    "longitude": ""
+                },
+                {
+                    "latitude": "",
+                    "longitude": ""
+                },
+                {
+                    "latitude": "",
+                    "longitude": ""
+                },
+                {
+                    "latitude": "",
+                    "longitude": ""
+                },
+                {
+                    "latitude": "",
+                    "longitude": ""
+                },
+                {
+                    "latitude": "",
+                    "longitude": ""
+                }
+            ],
+            "lastUpdated": ""
+        }
+    ]
+}
