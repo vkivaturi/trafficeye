@@ -1,7 +1,10 @@
 import { Camera, CameraType } from 'expo-camera';
-import { useState } from 'react';
+import * as Location from 'expo-location';
+import { LocationGeocodedAddress } from 'expo-location/build/Location.types';
+import { useState, useEffect } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import {CameraPreview} from '../components/CameraPreview';
+import { CameraPreview } from '../components/CameraPreview';
+import { TextPreview } from '../components/TextPreview';
 
 //Traffic violation screen is used to open camera, take picture, preview the image
 export default function TrafficViolationScreen() {
@@ -12,6 +15,22 @@ export default function TrafficViolationScreen() {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [capturedImage, setCapturedImage] = useState<any>(null);
 
+  const [location, setLocation] = useState<Location.LocationObject | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  //Location permission - start
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+    })();
+  }, []);
+  //Location permission - end
+
+  //Camera permission - start
   if (!permission) {
     // Camera permissions are still loading
     return <View />;
@@ -26,15 +45,39 @@ export default function TrafficViolationScreen() {
       </View>
     );
   }
+  //Camera permission - end
 
   //Take picture and set preview flag to true
   const takePicture = async () => {
     if (camera) {
       const photo = await camera.takePictureAsync();
       console.log(photo);
+      //console.log(location?.coords.latitude);
+      
+      //Redirect user to the preview screen. Location address is slow and async operation and will run in background
       setPreviewVisible(true);
       setCapturedImage(photo);
 
+      //Fetch address details based on location - start
+      let location: Location.LocationObject = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+
+      if(location.coords) {
+        //const {latitude, longitude} = location.coords;
+
+        //TEST
+        let latitude = 17.427533003510074;
+        let longitude = 78.33180817127493;
+
+        let response = await Location.reverseGeocodeAsync({latitude, longitude});
+        console.log("#### " + response);
+        for (let item of response) {
+          //let address = `${item.name}, ${item.street}, ${item.postalCode}, ${item.city}`;
+          console.log(item);    
+        }
+        //Fetch address details based on location - end
+
+      }      
     }
   }
 
