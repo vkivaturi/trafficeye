@@ -51,9 +51,10 @@ export default function TrafficViolationScreen() {
   const takePicture = async () => {
     if (camera) {
       const photo = await camera.takePictureAsync();
-      console.log(photo);
+      console.log("Main screen photo.uri - ", photo.uri);
       //console.log(location?.coords.latitude);
       
+
       //Redirect user to the preview screen. Location address is slow and async operation and will run in background
       setPreviewVisible(true);
       setCapturedImage(photo);
@@ -70,13 +71,11 @@ export default function TrafficViolationScreen() {
         let longitude = 78.33180817127493;
 
         let response = await Location.reverseGeocodeAsync({latitude, longitude});
-        console.log("#### " + response);
         for (let item of response) {
           //let address = `${item.name}, ${item.street}, ${item.postalCode}, ${item.city}`;
           console.log(item);    
         }
         //Fetch address details based on location - end
-
       }      
     }
   }
@@ -92,7 +91,8 @@ export default function TrafficViolationScreen() {
     <View style={styles.container}>
 
       {previewVisible && capturedImage ? (
-        <CameraPreview photo={capturedImage} retakePicture={retakePicture}/>
+        //<CameraPreview photo={capturedImage} retakePicture={retakePicture}/>
+        <TextPreview timestamp="2022-09.11" locationName="Nallagandla" landmark="Citizens" photo={capturedImage} retakePicture={retakePicture}/>
       ) :
         (<Camera
           style={styles.camera}

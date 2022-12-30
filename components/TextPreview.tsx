@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { Pressable, FlatList, Switch, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Modal, Alert } from 'react-native';
 import React from 'react';
-import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
+import { Avatar, Card, Paragraph } from 'react-native-paper';
+import { ImageThumb } from './ImageThumb';
 
+export const TextPreview = ({ timestamp, locationName, landmark, photo, retakePicture }: any) => {
 
-export const TextPreview = ({ timestamp, locationName, landmark }: any) => {
+  console.log("Text preview screen photo.uri - ", photo.uri, photo.width);
 
   let isDisplay = false;
   const [data, setData] = useState([
@@ -50,12 +52,13 @@ export const TextPreview = ({ timestamp, locationName, landmark }: any) => {
             // Try setting `flexDirection` to `"row"`.
             flexDirection: "row"
           }]}>
-            <View style={{ flex: 1, backgroundColor: "white" }} />
+            <View style={{ flex: 1, backgroundColor: "white" }}>
+              <ImageThumb photo = {photo}></ImageThumb>
+            </View>
             <View style={{ flex: 1, backgroundColor: "white" }}>
               <Card>
                 <View style={{ backgroundColor: "white" }}>
                   <Card.Title title={"Location"} left={(props) => <Avatar.Icon {...props} icon="map-marker" />} />
-
                   <Card.Content>
                     <Paragraph>{locationName}</Paragraph>
                     <Paragraph>{landmark}</Paragraph>
@@ -78,7 +81,7 @@ export const TextPreview = ({ timestamp, locationName, landmark }: any) => {
               <Text style={styles.buttonText}>Share</Text>
             </Pressable>
             <Pressable style={[styles.button, { flex: 1, backgroundColor: 'orange' }]}
-              onPress={() => Alert.alert('Right button pressed')}>
+              onPress={retakePicture}>
               <Text style={styles.buttonText}>Cancel</Text>
             </Pressable>
           </View>
