@@ -1,26 +1,23 @@
 import { useState } from 'react';
-import { TextInput, FlatList, Switch, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Modal } from 'react-native';
+import { Pressable, FlatList, Switch, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Modal, Alert } from 'react-native';
 import React from 'react';
+import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
+
 
 export const TextPreview = ({ timestamp, locationName, landmark }: any) => {
 
+  let isDisplay = false;
   const [data, setData] = useState([
     { label: 'Wrong side driving', selected: false },
-    { label: 'Traffic signal jump' },
     { label: 'No helmet while driving' },
     { label: 'Illegal parking' },
     { label: 'Traffic lights not working' },
-    { label: 'Number plate violation' }
   ]);
   const onUpdateValue = (index: number, value: boolean) => {
     console.log(data, index, value);
     data[index].selected = value;
     return setData([...data]);
   };
-
-  const onChangeText = () => {
-
-  }
 
   const renderItem = ({ item, index }: any) => (
     <Item
@@ -42,42 +39,81 @@ export const TextPreview = ({ timestamp, locationName, landmark }: any) => {
     </View>
   );
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <View>
-        <Text style={styles.whiteText}>{timestamp} -- {locationName} -- Near {landmark}</Text>
-      </View>
-      <View>
-        <Text style={styles.whiteText}>Selected Items</Text>
-        {data
-          .filter((item) => item.selected)
-          .map((item) => (
-            <Text style={styles.whiteText} key={item.label}>{item.label}</Text>
-          ))}
-      </View>
+  const Flex = () => {
+    return (
+      <View style={[styles.container, {
+        // Try setting `flexDirection` to `"row"`.
+        flexDirection: "column"
+      }]}>
+        <View style={{ flex: 4 }}>
+          <View style={[styles.container, {
+            // Try setting `flexDirection` to `"row"`.
+            flexDirection: "row"
+          }]}>
+            <View style={{ flex: 1, backgroundColor: "white" }} />
+            <View style={{ flex: 1, backgroundColor: "white" }}>
+              <Card>
+                <View style={{ backgroundColor: "white" }}>
+                  <Card.Title title={"Location"} left={(props) => <Avatar.Icon {...props} icon="map-marker" />} />
 
-      <Modal animationType="slide" transparent={true}>
-        <TouchableOpacity
-          activeOpacity={1}
-          style={{ flex: 1 }}>
-          <View style={{ flex: 1, marginTop: 200 }}>
-            <View style={styles.listWrapper}>
-              <View style={styles.listContainer}>
-                <FlatList
-                  data={data}
-                  renderItem={renderItem}
-                  keyExtractor={(item) => item.label}
-                />
-                  <TextInput
-                    style={styles.input}
-                    onChangeText={onChangeText}
-                    placeholder="useless placeholder"
-                  />
-              </View>
+                  <Card.Content>
+                    <Paragraph>{locationName}</Paragraph>
+                    <Paragraph>{landmark}</Paragraph>
+                    <Paragraph>{timestamp}</Paragraph>
+                  </Card.Content>
+                </View>
+              </Card>
             </View>
           </View>
-        </TouchableOpacity>
+        </View>
+        <View style={{ flex: 7 }}>
+          <OptionsList></OptionsList>
+        </View>
+        <View style={[styles.fixToText, { flex: 1 }]}>
+          <View style={[styles.container, {
+            // Try setting `flexDirection` to `"row"`.
+            flexDirection: "row"
+          }]}>
+            <Pressable style={[styles.button, { flex: 1, backgroundColor: 'green', }]} onPress={() => Alert.alert('Right button pressed')}>
+              <Text style={styles.buttonText}>Share</Text>
+            </Pressable>
+            <Pressable style={[styles.button, { flex: 1, backgroundColor: 'orange' }]}
+              onPress={() => Alert.alert('Right button pressed')}>
+              <Text style={styles.buttonText}>Cancel</Text>
+            </Pressable>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  const OptionsList = () => {
+    return (
+      <TouchableOpacity
+        activeOpacity={1}
+        style={{ flex: 1 }}>
+        <View style={{ flex: 1, marginTop: 2 }}>
+          <View style={styles.listWrapper}>
+            <View style={styles.listContainer}>
+              <FlatList
+                data={data}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.label}
+              />
+            </View>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  }
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <Flex></Flex>
+
+      {isDisplay ? (<Modal animationType="slide" transparent={true}>
       </Modal>
+      ) : (<Text>Test</Text>)}
     </SafeAreaView>
   );
 };
@@ -85,6 +121,7 @@ export const TextPreview = ({ timestamp, locationName, landmark }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%'
   },
   listWrapper: {
     flex: 1,
@@ -119,6 +156,25 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
+  },
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 1,
+    paddingHorizontal: 2,
+    borderRadius: 4,
+    elevation: 3,
+  },
+  buttonText: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white',
+  },
+  fixToText: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 
 });
