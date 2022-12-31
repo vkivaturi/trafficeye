@@ -3,24 +3,32 @@ import { Pressable, FlatList, Switch, SafeAreaView, StyleSheet, Text, TouchableO
 import React from 'react';
 import { Avatar, Card, Paragraph } from 'react-native-paper';
 import { ImageThumb } from './ImageThumb';
+import { ImageWithText } from './ImageWithText';
 
 export const TextPreview = ({ timestamp, locationName, landmark, photo, retakePicture }: any) => {
 
   console.log("Text preview screen photo.uri - ", photo.uri, photo.width);
 
-  let isDisplay = false;
+  const [isShareImage, setIsShareImage] = useState<boolean>(false);
+
+
   const [data, setData] = useState([
     { label: 'Wrong side driving', selected: false },
     { label: 'No helmet while driving' },
     { label: 'Illegal parking' },
     { label: 'Traffic lights not working' },
   ]);
+
   const onUpdateValue = (index: number, value: boolean) => {
     console.log(data, index, value);
     data[index].selected = value;
     return setData([...data]);
   };
 
+  const previewAndShare = () => {
+    console.log("inside previewAndShare");
+    setIsShareImage(true);
+  }
   const renderItem = ({ item, index }: any) => (
     <Item
       key={index}
@@ -53,7 +61,7 @@ export const TextPreview = ({ timestamp, locationName, landmark, photo, retakePi
             flexDirection: "row"
           }]}>
             <View style={{ flex: 1, backgroundColor: "white" }}>
-              <ImageThumb photo = {photo}></ImageThumb>
+              <ImageThumb photo={photo}></ImageThumb>
             </View>
             <View style={{ flex: 1, backgroundColor: "white" }}>
               <Card>
@@ -77,7 +85,8 @@ export const TextPreview = ({ timestamp, locationName, landmark, photo, retakePi
             // Try setting `flexDirection` to `"row"`.
             flexDirection: "row"
           }]}>
-            <Pressable style={[styles.button, { flex: 1, backgroundColor: 'green', }]} onPress={() => Alert.alert('Right button pressed')}>
+            <Pressable style={[styles.button, { flex: 1, backgroundColor: 'green', }]}
+              onPress={previewAndShare}>
               <Text style={styles.buttonText}>Share</Text>
             </Pressable>
             <Pressable style={[styles.button, { flex: 1, backgroundColor: 'orange' }]}
@@ -112,11 +121,8 @@ export const TextPreview = ({ timestamp, locationName, landmark, photo, retakePi
 
   return (
     <SafeAreaView style={styles.container}>
-      <Flex></Flex>
-
-      {isDisplay ? (<Modal animationType="slide" transparent={true}>
-      </Modal>
-      ) : (<Text>Test</Text>)}
+      {isShareImage ? (<ImageWithText photoUri={photo.uri} photoWidth={photo.width} photoHeight={photo.height} timestamp={timestamp} location={locationName} landmark={landmark} notes="test notes"></ImageWithText>
+      ) : (<Flex></Flex>)}
     </SafeAreaView>
   );
 };
