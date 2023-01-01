@@ -8,6 +8,7 @@ import { ImageWithText } from './ImageWithText';
 export const TextPreview = ({ timestamp, locationName, landmark, photo, retakePicture }: any) => {
 
   console.log("Text preview screen photo.uri - ", photo.uri, photo.width);
+  console.log("Text preview screen timestamp - ", timestamp);
 
   const [isShareImage, setIsShareImage] = useState<boolean>(false);
 

@@ -12,9 +12,6 @@ export const ImageWithText = ({photoUri, photoWidth, photoHeight, timestamp, loc
     const screenWidth = Dimensions.get("window").width;
     const screenHeight = Dimensions.get("window").height;
 
-
-    //const uriInput = 'https://reactjs.org/logo-og.png';
-
     const captureAndShareScreenshot = () => {
         viewShot.current.capture().then((uri: string) => {
             console.log("do something with ", uri);
@@ -22,8 +19,6 @@ export const ImageWithText = ({photoUri, photoWidth, photoHeight, timestamp, loc
         }),
             (error: any) => console.error("Sorry, error in snapshot", error);
     };
-
-    console.log("ImageWithText photo " + photoUri);
 
     return (
         <View>
@@ -36,10 +31,9 @@ export const ImageWithText = ({photoUri, photoWidth, photoHeight, timestamp, loc
                         source={{ uri: photoUri }}
                         style={{ width: screenWidth, height: screenHeight-200}}
                     ></Image>
-                    <Text style={{color: 'white'}}>Timestamp - {timestamp}</Text>
-                    <Text style={{color: 'white'}}>Location - {location}</Text>
-                    <Text style={{color: 'white'}}>Landmark - {landmark}</Text>
-                    <Text style={{color: 'white'}}>Note - {notes}</Text>
+                    <Text style={{color: 'white'}}>{timestamp} - {location}</Text>
+                    <Text style={{color: 'white'}}>Near {landmark}</Text>
+                    <Text style={{color: 'white'}}>{notes}</Text>
                 </View>
             </ViewShot>
 

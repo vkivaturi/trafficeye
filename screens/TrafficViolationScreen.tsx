@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { CameraPreview } from '../components/CameraPreview';
 import { TextPreview } from '../components/TextPreview';
+import { CurrentDateFormat } from '../utils/dateformatter';
 
 //Traffic violation screen is used to open camera, take picture, preview the image
 export default function TrafficViolationScreen() {
@@ -17,6 +18,7 @@ export default function TrafficViolationScreen() {
 
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [currentDateLocal, setCurrentDateLocal] = useState<string | null>(null);
 
   //Location permission - start
   useEffect(() => {
@@ -52,21 +54,25 @@ export default function TrafficViolationScreen() {
     if (camera) {
       const photo = await camera.takePictureAsync();
       console.log("Main screen photo.uri - ", photo.uri);
+
       //console.log(location?.coords.latitude);
-      
 
       //Redirect user to the preview screen. Location address is slow and async operation and will run in background
       setPreviewVisible(true);
       setCapturedImage(photo);
+
+      //Fetch current date in specific format
+      setCurrentDateLocal(CurrentDateFormat());
+      console.log("## Traffic violation screen currentDateLocal " + currentDateLocal);
 
       //Fetch address details based on location - start
       let location: Location.LocationObject = await Location.getCurrentPositionAsync({});
       setLocation(location);
 
       if(location.coords) {
-        //const {latitude, longitude} = location.coords;
+//        const {latitude, longitude} = location.coords;
 
-        //TEST
+//        TEST
         let latitude = 17.427533003510074;
         let longitude = 78.33180817127493;
 
@@ -92,7 +98,7 @@ export default function TrafficViolationScreen() {
 
       {previewVisible && capturedImage ? (
         //<CameraPreview photo={capturedImage} retakePicture={retakePicture}/>
-        <TextPreview timestamp="2022-09.11" locationName="Nallagandla" landmark="Citizens" photo={capturedImage} retakePicture={retakePicture}/>
+        <TextPreview timestamp={currentDateLocal} locationName="Nallagandla" landmark="Citizens" photo={capturedImage} retakePicture={retakePicture}/>
       ) :
         (<Camera
           style={styles.camera}
