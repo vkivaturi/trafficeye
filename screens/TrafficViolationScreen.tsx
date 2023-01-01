@@ -3,20 +3,24 @@ import * as Location from 'expo-location';
 import { LocationGeocodedAddress } from 'expo-location/build/Location.types';
 import { useState, useEffect } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { CameraPreview } from '../components/CameraPreview';
 import { TextPreview } from '../components/TextPreview';
 import { CurrentDateFormat } from '../utils/dateformatter';
+import {findNearestLandmark} from '../utils/geo';
+
+const LANDMARK_DISTANCE_KMS = 1;
 
 //Traffic violation screen is used to open camera, take picture, preview the image
 export default function TrafficViolationScreen() {
   const [type, setType] = useState(CameraType.back);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [camera, setCamera] = useState<Camera | null>(null);
-  const [image, setImage] = useState<string | null>(null);
+  //const [image, setImage] = useState<string | null>(null);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [capturedImage, setCapturedImage] = useState<any>(null);
+  const [geolocationAddress, setGeolocationAddress] = useState<LocationGeocodedAddress | null>(null);
+  const [landmark, setLandmark] = useState<string | null>(null);
 
-  const [location, setLocation] = useState<Location.LocationObject | null>(null);
+  //const [userLocation, setUserLocation] = useState<Location.LocationObject | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [currentDateLocal, setCurrentDateLocal] = useState<string | null>(null);
 
@@ -53,8 +57,6 @@ export default function TrafficViolationScreen() {
   const takePicture = async () => {
     if (camera) {
       const photo = await camera.takePictureAsync();
-      console.log("Main screen photo.uri - ", photo.uri);
-
       //console.log(location?.coords.latitude);
 
       //Redirect user to the preview screen. Location address is slow and async operation and will run in background
@@ -63,26 +65,30 @@ export default function TrafficViolationScreen() {
 
       //Fetch current date in specific format
       setCurrentDateLocal(CurrentDateFormat());
-      console.log("## Traffic violation screen currentDateLocal " + currentDateLocal);
 
       //Fetch address details based on location - start
-      let location: Location.LocationObject = await Location.getCurrentPositionAsync({});
-      setLocation(location);
+      let locationLocal: Location.LocationObject = await Location.getCurrentPositionAsync({});
+      //setUserLocation(locationLocal);
 
-      if(location.coords) {
-//        const {latitude, longitude} = location.coords;
+      if (locationLocal.coords) {
+        const { latitude, longitude } = locationLocal.coords;
+        //        TEST
+        // let latitude = 17.427533003510074;
+        // let longitude = 78.33180817127493;
 
-//        TEST
-        let latitude = 17.427533003510074;
-        let longitude = 78.33180817127493;
+        //Find the nearest landmark based on json configuration
+        setLandmark(findNearestLandmark(latitude, longitude, LANDMARK_DISTANCE_KMS));
 
-        let response = await Location.reverseGeocodeAsync({latitude, longitude});
-        for (let item of response) {
-          //let address = `${item.name}, ${item.street}, ${item.postalCode}, ${item.city}`;
-          console.log(item);    
-        }
+        //Fetch the address name
+        let response = await Location.reverseGeocodeAsync({ latitude, longitude });
+
+        //console.log("response[0].postalCode " + response[0].postalCode);
+        //          let address = `${item.name},  ${item.postalCode}, ${item.city}`;
+        
+        //Assign the first element in address
+        setGeolocationAddress(response[0]);
         //Fetch address details based on location - end
-      }      
+      }
     }
   }
 
@@ -98,7 +104,7 @@ export default function TrafficViolationScreen() {
 
       {previewVisible && capturedImage ? (
         //<CameraPreview photo={capturedImage} retakePicture={retakePicture}/>
-        <TextPreview timestamp={currentDateLocal} locationName="Nallagandla" landmark="Citizens" photo={capturedImage} retakePicture={retakePicture}/>
+        <TextPreview timestamp={currentDateLocal} locationName={geolocationAddress?.name} locationCity={geolocationAddress?.city} locationPostalCode={geolocationAddress?.postalCode} landmark={landmark} photo={capturedImage} retakePicture={retakePicture} />
       ) :
         (<Camera
           style={styles.camera}

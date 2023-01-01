@@ -5,7 +5,7 @@ import { View, Image, Text, StyleSheet, TouchableOpacity, Dimensions } from 'rea
 
 //Component adds text to image and also allows for saving / sharing of the updated photo
 
-export const ImageWithText = ({photoUri, photoWidth, photoHeight, timestamp, location, landmark, notes} : any) => {
+export const ImageWithText = ({photoUri, photoWidth, photoHeight, timestamp, locationName, locationCity, locationPostalCode, landmark, notes} : any) => {
 
     const viewShot = React.useRef();
 
@@ -31,9 +31,8 @@ export const ImageWithText = ({photoUri, photoWidth, photoHeight, timestamp, loc
                         source={{ uri: photoUri }}
                         style={{ width: screenWidth, height: screenHeight-200}}
                     ></Image>
-                    <Text style={{color: 'white'}}>{timestamp} - {location}</Text>
-                    <Text style={{color: 'white'}}>Near {landmark}</Text>
-                    <Text style={{color: 'white'}}>{notes}</Text>
+                    <Text style={{color: 'white'}}>{timestamp} - {locationName}, {locationCity}, {locationPostalCode} - Near {landmark}</Text>
+                    <Text style={{color: 'white'}}>Note - {notes}</Text>
                 </View>
             </ViewShot>
 

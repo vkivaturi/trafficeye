@@ -8,9 +8,7 @@ export const ImageThumb = ({photo}: any) => {
     const [modalVisible, setModalVisible] = useState(false);
     const screenWidth = Dimensions.get("window").width;
     const screenHeight = Dimensions.get("window").height;
-
-    console.log("Image thumb screen photo.uri - ", photo.uri, photo.width);
-
+    
     return (
         <View style={styles.centeredView}>
             <Modal

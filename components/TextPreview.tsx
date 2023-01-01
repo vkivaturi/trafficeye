@@ -5,13 +5,9 @@ import { Avatar, Card, Paragraph } from 'react-native-paper';
 import { ImageThumb } from './ImageThumb';
 import { ImageWithText } from './ImageWithText';
 
-export const TextPreview = ({ timestamp, locationName, landmark, photo, retakePicture }: any) => {
-
-  console.log("Text preview screen photo.uri - ", photo.uri, photo.width);
-  console.log("Text preview screen timestamp - ", timestamp);
+export const TextPreview = ({ timestamp, locationName, locationCity, locationPostalCode, landmark, photo, retakePicture }: any) => {
 
   const [isShareImage, setIsShareImage] = useState<boolean>(false);
-
 
   const [data, setData] = useState([
     { label: 'Wrong side driving', selected: false },
@@ -27,7 +23,6 @@ export const TextPreview = ({ timestamp, locationName, landmark, photo, retakePi
   };
 
   const previewAndShare = () => {
-    console.log("inside previewAndShare");
     setIsShareImage(true);
   }
   const renderItem = ({ item, index }: any) => (
@@ -69,7 +64,7 @@ export const TextPreview = ({ timestamp, locationName, landmark, photo, retakePi
                 <View style={{ backgroundColor: "white" }}>
                   <Card.Title title={"Location"} left={(props) => <Avatar.Icon {...props} icon="map-marker" />} />
                   <Card.Content>
-                    <Paragraph>{locationName}</Paragraph>
+                    <Paragraph>{locationName}, {locationCity}, {locationPostalCode}</Paragraph>
                     <Paragraph>{landmark}</Paragraph>
                     <Paragraph>{timestamp}</Paragraph>
                   </Card.Content>
@@ -122,7 +117,7 @@ export const TextPreview = ({ timestamp, locationName, landmark, photo, retakePi
 
   return (
     <SafeAreaView style={styles.container}>
-      {isShareImage ? (<ImageWithText photoUri={photo.uri} photoWidth={photo.width} photoHeight={photo.height} timestamp={timestamp} location={locationName} landmark={landmark} notes="test notes"></ImageWithText>
+      {isShareImage ? (<ImageWithText photoUri={photo.uri} photoWidth={photo.width} photoHeight={photo.height} timestamp={timestamp} locationName={locationName} locationCity={locationCity} locationPostalCode={locationPostalCode} landmark={landmark} notes="test notes"></ImageWithText>
       ) : (<Flex></Flex>)}
     </SafeAreaView>
   );
